@@ -25,6 +25,10 @@ use SjorsO\Gobble\GuzzleWrapper;
  * @method static PromiseInterface patchAsync(string|UriInterface $uri, array $options = [])
  * @method static PromiseInterface deleteAsync(string|UriInterface $uri, array $options = [])
  *
+ * @method static GuzzleFakeWrapper pushResponse($response)
+ * @method static GuzzleFakeWrapper pushString($string, $status = 200, $headers = [])
+ * @method static GuzzleFakeWrapper pushFile($filePath, $status = 200, $headers = [])
+ *
  * @see \GuzzleHttp\Client
  */
 class Gobble extends Facade
@@ -38,8 +42,13 @@ class Gobble extends Facade
             : GuzzleWrapper::class;
     }
 
-    protected static function fake()
+    public static function fake()
     {
-        self::$faked = true;
+        static::$faked = true;
+    }
+
+    public static function unfake()
+    {
+        static::$faked = false;
     }
 }
