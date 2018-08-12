@@ -1,6 +1,6 @@
 <?php
 
-namespace SjorsO\TextFile\Providers;
+namespace SjorsO\Gobble\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use SjorsO\Gobble\GuzzleFakeWrapper;
