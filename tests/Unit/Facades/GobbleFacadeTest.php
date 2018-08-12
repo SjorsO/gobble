@@ -34,7 +34,9 @@ class GobbleFacadeTest extends TestCase
     /** @test */
     function when_faked_it_resolves_to_a_guzzle_fake_wrapper()
     {
-        Gobble::fake();
+        $guzzleFakeWrapper = Gobble::fake();
+
+        $this->assertInstanceOf(GuzzleFakeWrapper::class, $guzzleFakeWrapper);
 
         $facadeRoot = Gobble::getFacadeRoot();
 

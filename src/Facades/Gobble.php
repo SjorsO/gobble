@@ -42,9 +42,14 @@ class Gobble extends Facade
             : GuzzleWrapper::class;
     }
 
+    /**
+     * @return GuzzleFakeWrapper
+     */
     public static function fake()
     {
         static::$faked = true;
+
+        return static::getFacadeRoot();
     }
 
     public static function unfake()
