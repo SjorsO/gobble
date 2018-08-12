@@ -1,6 +1,6 @@
 {
     "name": "sjorso/gobble",
-    "description": "Laravel facade for Guzzle that is easy to fake",
+    "description": "A Laravel specific wrapper around Guzzle that is easy to fake",
     "license": "MIT",
     "homepage": "https://github.com/SjorsO/gobble",
     "keywords": [
