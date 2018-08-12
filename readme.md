@@ -1,5 +1,5 @@
 # Readme
-A Laravel specific wrapper around Guzzle that is easy to fake.
+A Laravel specific wrapper around Guzzle that makes it easy to mock responses.
 
 ## Install
 ```bash
