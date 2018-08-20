@@ -38,6 +38,11 @@
         "illuminate/container": "^5.6"
     },
     "extra": {
+        "dependencies": {
+            "extensions": [
+                "curl"
+            ]
+        },
         "laravel": {
             "providers": [
                 "SjorsO\\Gobble\\Providers\\GobbleProvider"
