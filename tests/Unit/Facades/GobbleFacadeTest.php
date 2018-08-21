@@ -2,7 +2,6 @@
 
 namespace SjorsO\Gobble\Tests\Unit\Facades;
 
-use Illuminate\Container\Container;
 use SjorsO\Gobble\Facades\Gobble;
 use SjorsO\Gobble\GuzzleFakeWrapper;
 use SjorsO\Gobble\GuzzleWrapper;
@@ -10,19 +9,6 @@ use SjorsO\Gobble\Tests\TestCase;
 
 class GobbleFacadeTest extends TestCase
 {
-    public function setUp()
-    {
-        parent::setUp();
-
-        // reset Gobble to its original state, otherwise these tests
-        // fail if you change their order.
-        Gobble::unfake();
-
-        Gobble::setFacadeApplication(
-            Container::getInstance()
-        );
-    }
-
     /** @test */
     function it_resolves_to_a_guzzle_wrapper()
     {
@@ -48,12 +34,14 @@ class GobbleFacadeTest extends TestCase
     {
         $this->assertInstanceOf(GuzzleWrapper::class, Gobble::getFacadeRoot());
 
-        Gobble::fake();
+        $fakeReturnedClass = Gobble::fake();
 
+        $this->assertInstanceOf(GuzzleFakeWrapper::class, $fakeReturnedClass);
         $this->assertInstanceOf(GuzzleFakeWrapper::class, Gobble::getFacadeRoot());
 
-        Gobble::unfake();
+        $unfakeReturnedClass = Gobble::unfake();
 
+        $this->assertInstanceOf(GuzzleWrapper::class, $unfakeReturnedClass);
         $this->assertInstanceOf(GuzzleWrapper::class, Gobble::getFacadeRoot());
     }
 }

@@ -33,13 +33,9 @@ use SjorsO\Gobble\GuzzleWrapper;
  */
 class Gobble extends Facade
 {
-    protected static $faked = false;
-
     protected static function getFacadeAccessor()
     {
-        return static::$faked
-            ? GuzzleFakeWrapper::class
-            : GuzzleWrapper::class;
+        return 'Gobble';
     }
 
     /**
@@ -47,13 +43,22 @@ class Gobble extends Facade
      */
     public static function fake()
     {
-        static::$faked = true;
+        static::swap(
+            static::$app[GuzzleFakeWrapper::class]
+        );
 
         return static::getFacadeRoot();
     }
 
+    /**
+     * @return GuzzleWrapper
+     */
     public static function unfake()
     {
-        static::$faked = false;
+        static::swap(
+            static::$app[GuzzleWrapper::class]
+        );
+
+        return static::getFacadeRoot();
     }
 }

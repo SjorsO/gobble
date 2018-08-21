@@ -15,7 +15,7 @@ class GobbleProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton(GuzzleWrapper::class);
+        $this->app->singleton('Gobble', GuzzleWrapper::class);
 
         $this->app->singleton(GuzzleFakeWrapper::class);
     }
