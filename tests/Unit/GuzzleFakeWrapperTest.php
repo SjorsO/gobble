@@ -9,33 +9,27 @@ use SjorsO\Gobble\Tests\TestCase;
 
 class GuzzleFakeWrapperTest extends TestCase
 {
-    /** @var GuzzleFakeWrapper $guzzleFakeWrapper */
-    protected $guzzleFakeWrapper;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->guzzleFakeWrapper = new GuzzleFakeWrapper();
-    }
-
     /** @test */
     function it_throws_an_exception_if_no_responses_are_queued()
     {
+        $gobbleFake = new GuzzleFakeWrapper();
+
         $this->expectException(OutOfBoundsException::class);
 
-        $this->guzzleFakeWrapper->get('https://laravel.com');
+        $gobbleFake->get('https://laravel.com');
     }
 
     /** @test */
     function it_can_push_a_response()
     {
+        $gobbleFake = new GuzzleFakeWrapper();
+
         $response = new Response(204, [], 'Body content!');
 
-        $this->guzzleFakeWrapper->pushResponse($response);
+        $gobbleFake->pushResponse($response);
 
         /** @var Response $response */
-        $response = $this->guzzleFakeWrapper->get('https://laravel.com');
+        $response = $gobbleFake->get('https://laravel.com');
 
         $this->assertInstanceOf(Response::class, $response);
 
@@ -47,10 +41,12 @@ class GuzzleFakeWrapperTest extends TestCase
     /** @test */
     function it_can_push_string_responses()
     {
-        $this->guzzleFakeWrapper->pushString('faked!');
+        $gobbleFake = new GuzzleFakeWrapper();
+
+        $gobbleFake->pushString('faked!');
 
         /** @var Response $response */
-        $response = $this->guzzleFakeWrapper->get('https://laravel.com');
+        $response = $gobbleFake->get('https://laravel.com');
 
         $this->assertInstanceOf(Response::class, $response);
 
@@ -62,12 +58,14 @@ class GuzzleFakeWrapperTest extends TestCase
     /** @test */
     function it_can_push_file_responses()
     {
+        $gobbleFake = new GuzzleFakeWrapper();
+
         $filePath = $this->testFilePath.'test-01.json';
 
-        $this->guzzleFakeWrapper->pushFile($filePath);
+        $gobbleFake->pushFile($filePath);
 
         /** @var Response $response */
-        $response = $this->guzzleFakeWrapper->get('https://laravel.com');
+        $response = $gobbleFake->get('https://laravel.com');
 
         $this->assertInstanceOf(Response::class, $response);
 
