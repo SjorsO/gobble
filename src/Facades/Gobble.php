@@ -10,7 +10,7 @@ use SjorsO\Gobble\GuzzleFakeWrapper;
 use SjorsO\Gobble\GuzzleWrapper;
 
 /**
- * @method static ResponseInterface request(string|UriInterface $uri, array $options = [])
+ * @method static ResponseInterface request(string $method, string|UriInterface $uri, array $options = [])
  *
  * @method static ResponseInterface get(string|UriInterface $uri, array $options = [])
  * @method static ResponseInterface head(string|UriInterface $uri, array $options = [])
