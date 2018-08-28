@@ -34,6 +34,8 @@ When Gobble is faked, you can use the following methods to push fake responses t
 ```php
 public function pushResponse($response);
 
+public function pushEmptyResponse($status = 200, $headers = []);
+
 public function pushString($string, $status = 200, $headers = []);
 
 public function pushFile($filePath, $status = 200, $headers = []);

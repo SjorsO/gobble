@@ -39,6 +39,23 @@ class GuzzleFakeWrapperTest extends TestCase
     }
 
     /** @test */
+    function it_can_push_an_empty_response()
+    {
+        $gobbleFake = new GuzzleFakeWrapper();
+
+        $gobbleFake->pushEmptyResponse();
+
+        /** @var Response $response */
+        $response = $gobbleFake->get('https://laravel.com');
+
+        $this->assertInstanceOf(Response::class, $response);
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->assertSame('', $response->getBody()->getContents());
+    }
+
+    /** @test */
     function it_can_push_string_responses()
     {
         $gobbleFake = new GuzzleFakeWrapper();

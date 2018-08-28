@@ -30,6 +30,13 @@ class GuzzleFakeWrapper
         return $this;
     }
 
+    public function pushEmptyResponse($status = 200, $headers = [])
+    {
+        return $this->pushResponse(
+            new Response($status, $headers)
+        );
+    }
+
     public function pushString($string, $status = 200, $headers = [])
     {
         return $this->pushResponse(
