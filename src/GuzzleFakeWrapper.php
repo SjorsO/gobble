@@ -5,19 +5,28 @@ namespace SjorsO\Gobble;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
+use RuntimeException;
+use SjorsO\Gobble\Support\RequestHistory;
 
 class GuzzleFakeWrapper
 {
     protected $guzzle;
 
-    /** @var $mockHandler MockHandler */
+    /** @var MockHandler */
     protected $mockHandler;
+
+    protected $requestHistory = [];
 
     public function __construct()
     {
         $handler = HandlerStack::create(
             $this->mockHandler = new MockHandler()
+        );
+
+        $handler->push(
+            Middleware::history($this->requestHistory)
         );
 
         $this->guzzle = new Guzzle(['handler' => $handler]);
@@ -51,6 +60,27 @@ class GuzzleFakeWrapper
         return $this->pushResponse(
             new Response($status, $headers, $string)
         );
+    }
+
+    /**
+     * @return array|RequestHistory[]
+     */
+    public function requestHistory()
+    {
+        return array_map(function ($guzzleRequestHistory) {
+            return new RequestHistory($guzzleRequestHistory);
+        }, $this->requestHistory);
+    }
+
+    public function lastRequest()
+    {
+        $history = static::requestHistory();
+
+        if (count($history) === 0) {
+            throw new RuntimeException('History does not contain any requests');
+        }
+
+        return end($history);
     }
 
     public function __call($method, $arguments)

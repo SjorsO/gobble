@@ -4,6 +4,7 @@ namespace SjorsO\Gobble\Tests\Unit;
 
 use GuzzleHttp\Psr7\Response;
 use OutOfBoundsException;
+use RuntimeException;
 use SjorsO\Gobble\GuzzleFakeWrapper;
 use SjorsO\Gobble\Tests\TestCase;
 
@@ -92,5 +93,72 @@ class GuzzleFakeWrapperTest extends TestCase
             file_get_contents($filePath),
             $response->getBody()->getContents()
         );
+    }
+
+    /** @test */
+    function push_response_methods_are_fluent()
+    {
+        (new GuzzleFakeWrapper)
+            ->pushEmptyResponse()
+            ->pushString('OK')
+            ->pushFile($this->testFilePath.'test-01.json')
+            ->pushResponse(new Response)
+            ->pushEmptyResponse();
+
+        $this->assertTrue(true);
+    }
+
+    /** @test */
+    function it_keeps_a_history_of_requests_made()
+    {
+        $gobbleFake = (new GuzzleFakeWrapper)
+            ->pushEmptyResponse()
+            ->pushEmptyResponse();
+
+        $response1 = $gobbleFake->get('https://laravel.com');
+
+        $response2 = $gobbleFake->get('https://golang.org');
+
+        $history = $gobbleFake->requestHistory();
+
+        $this->assertCount(2, $history);
+
+        $this->assertSame(
+            'https://laravel.com',
+            (string) $history[0]->request->getUri()
+        );
+
+        $this->assertSame($response1, $history[0]->response);
+
+        $this->assertSame(
+            'https://golang.org',
+            (string) $history[1]->request->getUri()
+        );
+
+        $this->assertSame($response2, $history[1]->response);
+    }
+
+    /** @test */
+    function it_can_get_the_last_request_made()
+    {
+        $gobbleFake = (new GuzzleFakeWrapper)
+            ->pushEmptyResponse()
+            ->pushEmptyResponse();
+
+        $gobbleFake->get('https://laravel.com');
+
+        $lastResponse = $gobbleFake->get('https://golang.org');
+
+        $this->assertSame($lastResponse, $gobbleFake->lastRequest()->response);
+    }
+
+    /** @test */
+    function it_throws_an_exception_when_trying_to_get_the_last_request_when_no_requests_are_made()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $gobbleFake = new GuzzleFakeWrapper();
+
+        $gobbleFake->lastRequest();
     }
 }
