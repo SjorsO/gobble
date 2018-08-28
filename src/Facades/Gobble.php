@@ -8,6 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use SjorsO\Gobble\GuzzleFakeWrapper;
 use SjorsO\Gobble\GuzzleWrapper;
+use SjorsO\Gobble\Support\RequestHistory;
 
 /**
  * @method static ResponseInterface request(string $method, string|UriInterface $uri, array $options = [])
@@ -26,8 +27,12 @@ use SjorsO\Gobble\GuzzleWrapper;
  * @method static PromiseInterface deleteAsync(string|UriInterface $uri, array $options = [])
  *
  * @method static GuzzleFakeWrapper pushResponse($response)
+ * @method static GuzzleFakeWrapper pushEmptyResponse($status = 200, $headers = [])
  * @method static GuzzleFakeWrapper pushString($string, $status = 200, $headers = [])
  * @method static GuzzleFakeWrapper pushFile($filePath, $status = 200, $headers = [])
+ *
+ * @method static array|RequestHistory[] requestHistory()
+ * @method static array|RequestHistory lastRequest()
  *
  * @see \GuzzleHttp\Client
  */

@@ -11,17 +11,16 @@ You can use the `Gobble` facade in your code to make requests with Guzzle. The G
 ```php
 use SjorsO\Gobble\Facades\Gobble as Guzzle;
 
-$response = Guzzle::request('GET', 'https://laravel.com');
+$response = Guzzle::get('https://laravel.com');
 ```
 
+### Mocking responses
 When writing tests, you can fake Gobble to make it use [Guzzle's built-in mock handler](http://docs.guzzlephp.org/en/stable/testing.html). When Gobble is faked it returns a `GuzzleFakeWrapper` instance. Using this fake wrapper you can easily push responses to the mock handler stack:
 ```php
-use SjorsO\Gobble\Facades\Gobble as Guzzle;
-
 /** @test */
 function it_can_get_a_cat_fact()
 {
-    Guzzle::fake()->pushString('{"fact": "Cats are great!"}', 200);
+    Gobble::fake()->pushString('{"fact": "Cats are great!"}', 200);
 
     // This job makes a call using Gobble to "https://catfact.ninja/fact"
     CreateCatFactJob::dispatchNow();
@@ -39,6 +38,42 @@ public function pushEmptyResponse($status = 200, $headers = []);
 public function pushString($string, $status = 200, $headers = []);
 
 public function pushFile($filePath, $status = 200, $headers = []);
+```
+
+### Request history
+When Gobble is faked, it uses [Guzzle's built-in history middleware](http://docs.guzzlephp.org/en/stable/testing.html#history-middleware) to keep track of all requests made. You can use this history to make assertions about the calls that are made with Guzzle:
+```php
+/** @test */
+function it_makes_a_call_to_the_cat_fact_api()
+{
+    Gobble::fake()->pushEmptyResponse();
+
+    CreateCatFactJob::dispatchNow();
+
+    $history = Gobble::requestHistory();
+
+    $this->assertCount(1, $history);
+
+    $this->assertSame(
+        'https://catfact.ninja/fact',
+        (string) $history[0]->request->getUri()
+    );
+}
+```
+
+You can use the `lastRequest()` method to get the last request made with Gobble:
+```php
+/** @test */
+function it_is_an_example_in_the_readme()
+{
+    Gobble::fake()->pushEmptyResponse();
+
+    $response = Gobble::get('https://example.com');
+
+    $lastRequest = Gobble::lastRequest();
+
+    // $response === $lastRequest->response
+}
 ```
 
 ### Guzzle configuration
