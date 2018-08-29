@@ -88,8 +88,11 @@ class AppServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->bind(Guzzle::class, function () {
-            return new Guzzle(['timeout' => 5, 'connect_timeout' => 5]);
+        $this->app->bind(\GuzzleHttp\Client::class, function () {
+            return new \GuzzleHttp\Client([
+                'timeout' => 5,
+                'connect_timeout' => 5,
+            ]);
         });
     }
 }
