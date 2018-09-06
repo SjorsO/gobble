@@ -32,12 +32,7 @@ class RequestHistory implements ArrayAccess
 
     public function offsetExists($offset)
     {
-        return in_array($offset, [
-            'request',
-            'response',
-            'error',
-            'options',
-        ]);
+        return in_array($offset, ['request', 'response', 'error', 'options']);
     }
 
     public function offsetGet($offset)
