@@ -53,6 +53,13 @@ class GuzzleFakeWrapper
         );
     }
 
+    public function pushJson(array $data, $status = 200, $headers = [])
+    {
+        return $this->pushResponse(
+            new Response($status, $headers, json_encode($data))
+        );
+    }
+
     public function pushFile($filePath, $status = 200, $headers = [])
     {
         $string = file_get_contents($filePath);

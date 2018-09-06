@@ -20,7 +20,7 @@ When writing tests, you can fake Gobble to make it use [Guzzle's built-in mock h
 /** @test */
 function it_can_get_a_cat_fact()
 {
-    Gobble::fake()->pushString('{"fact": "Cats are great!"}', 200);
+    Gobble::fake()->pushJson(['fact' => 'Cats are great!']);
 
     // This job makes a call using Gobble to "https://catfact.ninja/fact"
     CreateCatFactJob::dispatchNow();
@@ -36,6 +36,8 @@ public function pushResponse($response);
 public function pushEmptyResponse($status = 200, $headers = []);
 
 public function pushString($string, $status = 200, $headers = []);
+
+public function pushJson(array $data, $status = 200, $headers = []);
 
 public function pushFile($filePath, $status = 200, $headers = []);
 ```

@@ -74,6 +74,25 @@ class GuzzleFakeWrapperTest extends TestCase
     }
 
     /** @test */
+    function it_can_push_json_responses()
+    {
+        $gobbleFake = new GuzzleFakeWrapper();
+
+        $gobbleFake->pushJson([
+            'fact' => 'Cats are great!',
+        ]);
+
+        /** @var Response $response */
+        $response = $gobbleFake->get('https://laravel.com');
+
+        $this->assertInstanceOf(Response::class, $response);
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->assertSame('{"fact":"Cats are great!"}', $response->getBody()->getContents());
+    }
+
+    /** @test */
     function it_can_push_file_responses()
     {
         $gobbleFake = new GuzzleFakeWrapper();
