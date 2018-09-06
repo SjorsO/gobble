@@ -81,7 +81,7 @@ public function assertRequestBodyExact($expected);
 
 public function assertRequestBodyJson(array $data, $strict = false);
 
-public function assertRequestBodyExactJson(array $expected);
+public function assertRequestBodyExactJson(array $data);
 
 public function assertRequestUri($expected);
 ```

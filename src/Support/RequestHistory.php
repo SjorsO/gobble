@@ -62,9 +62,9 @@ class RequestHistory implements ArrayAccess
         return $this;
     }
 
-    public function assertRequestBodyExactJson(array $expected)
+    public function assertRequestBodyExactJson(array $data)
     {
-        $expected = json_encode(Arr::sortRecursive($expected));
+        $expected = json_encode(Arr::sortRecursive($data));
 
         $actual = json_encode(Arr::sortRecursive(
             (array) $this->decodeRequestJson()
