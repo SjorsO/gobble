@@ -41,7 +41,7 @@ public function pushFile($filePath, $status = 200, $headers = []);
 ```
 
 ### Request history
-When Gobble is faked, it uses [Guzzle's built-in history middleware](http://docs.guzzlephp.org/en/stable/testing.html#history-middleware) to keep track of all requests made. You can use this history to make assertions about the calls that are made with Guzzle:
+When Gobble is faked, it uses [Guzzle's built-in history middleware](http://docs.guzzlephp.org/en/stable/testing.html#history-middleware) to keep track of all requests made. Request history entries are wrapped in a `RequestHistory` class to add a handful of useful assertions, and to improve IDE auto-completion.
 ```php
 /** @test */
 function it_makes_a_call_to_the_cat_fact_api()
@@ -54,10 +54,7 @@ function it_makes_a_call_to_the_cat_fact_api()
 
     $this->assertCount(1, $history);
 
-    $this->assertSame(
-        'https://catfact.ninja/fact',
-        (string) $history[0]->request->getUri()
-    );
+    $history[0]->assertRequestUri('https://catfact.ninja/fact');
 }
 ```
 
@@ -74,6 +71,17 @@ function it_is_an_example_in_the_readme()
 
     // $response === $lastRequest->response
 }
+```
+
+The `RequestHistory` class offers the following assertions:
+```php
+public function assertRequestBodyExact($expected);
+
+public function assertRequestBodyJson(array $data, $strict = false);
+
+public function assertRequestBodyExactJson(array $expected);
+
+public function assertRequestUri($expected);
 ```
 
 ### Guzzle configuration
