@@ -2,6 +2,7 @@
 
 namespace SjorsO\Gobble\Tests\Unit\Facades;
 
+use PHPUnit\Framework\ExpectationFailedException;
 use SjorsO\Gobble\Facades\Gobble;
 use SjorsO\Gobble\GuzzleFakeWrapper;
 use SjorsO\Gobble\GuzzleWrapper;
@@ -43,5 +44,24 @@ class GobbleFacadeTest extends TestCase
 
         $this->assertInstanceOf(GuzzleWrapper::class, $unfakeReturnedClass);
         $this->assertInstanceOf(GuzzleWrapper::class, Gobble::getFacadeRoot());
+    }
+
+    /** @test */
+    function it_can_assert_the_amount_of_responses_in_the_mock_queue()
+    {
+        Gobble::fake()
+            ->assertMockQueueEmpty()
+            ->assertMockQueueCount(0)
+            ->pushEmptyResponse()
+            ->assertMockQueueCount(1);
+
+        try {
+            Gobble::assertMockQueueEmpty();
+        } catch (ExpectationFailedException $exception) {
+            $this->assertStringStartsWith(
+                'The Guzzle mock queue did not contain the expected amount of responses (expected: 0, actual 1)',
+                $exception->getMessage()
+            );
+        }
     }
 }

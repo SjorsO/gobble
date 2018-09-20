@@ -31,6 +31,9 @@ use SjorsO\Gobble\Support\RequestHistory;
  * @method static GuzzleFakeWrapper pushString($string, $status = 200, $headers = [])
  * @method static GuzzleFakeWrapper pushFile($filePath, $status = 200, $headers = [])
  *
+ * @method static GuzzleFakeWrapper assertMockQueueCount($expected)
+ * @method static GuzzleFakeWrapper assertMockQueueEmpty()
+ *
  * @method static array|RequestHistory[] requestHistory()
  * @method static array|RequestHistory lastRequest()
  *

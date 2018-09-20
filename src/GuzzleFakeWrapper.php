@@ -7,6 +7,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Assert as PHPUnit;
 use RuntimeException;
 use SjorsO\Gobble\Support\RequestHistory;
 
@@ -88,6 +89,22 @@ class GuzzleFakeWrapper
         }
 
         return end($history);
+    }
+
+    public function assertMockQueueCount($expected)
+    {
+        PHPUnit::assertSame(
+            $expected,
+            $actual = $this->mockHandler->count(),
+            "The Guzzle mock queue did not contain the expected amount of responses (expected: $expected, actual $actual)"
+        );
+
+        return $this;
+    }
+
+    public function assertMockQueueEmpty()
+    {
+        return $this->assertMockQueueCount(0);
     }
 
     public function __call($method, $arguments)

@@ -42,6 +42,13 @@ public function pushJson(array $data, $status = 200, $headers = []);
 public function pushFile($filePath, $status = 200, $headers = []);
 ```
 
+Gobble offers two methods to assert the amount of responses in the mock handler queue:
+```php
+Gobble::assertMockQueueCount(3);
+
+Gobble::assertMockQueueEmpty();
+```
+
 ### Request history
 When Gobble is faked, it uses [Guzzle's built-in history middleware](http://docs.guzzlephp.org/en/stable/testing.html#history-middleware) to keep track of all requests made. Request history entries are wrapped in a `RequestHistory` class to add a handful of useful assertions, and to improve IDE auto-completion.
 ```php
