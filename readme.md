@@ -7,15 +7,15 @@ composer require sjorso/gobble
 ```
 
 ## Usage
-You can use the `Gobble` facade in your code to make requests with Guzzle. The Gobble facade resolves to a `GuzzleWrapper` instance which proxies all method calls to `GuzzleHttp\Client`:
+You can use the `Gobble` facade in your code to make requests with Guzzle. The Gobble facade proxies all method calls to `GuzzleHttp\Client`:
 ```php
-use SjorsO\Gobble\Facades\Gobble as Guzzle;
+use SjorsO\Gobble\Facades\Gobble;
 
-$response = Guzzle::get('https://laravel.com');
+$response = Gobble::get('https://laravel.com');
 ```
 
 ### Mocking responses
-When writing tests, you can fake Gobble to make it use [Guzzle's built-in mock handler](http://docs.guzzlephp.org/en/stable/testing.html). When Gobble is faked it returns a `GuzzleFakeWrapper` instance. Using this fake wrapper you can easily push responses to the mock handler stack:
+When writing tests, you can fake Gobble to make it use [Guzzle's built-in mock handler](http://docs.guzzlephp.org/en/stable/testing.html). When `Gobble` is faked you can use it to push responses to the mock handler stack:
 ```php
 /** @test */
 function it_can_get_a_cat_fact()
@@ -31,15 +31,15 @@ function it_can_get_a_cat_fact()
 
 When Gobble is faked, you can use the following methods to push fake responses to the mock handler stack:
 ```php
-public function pushResponse($response);
+Gobble::pushResponse($response);
 
-public function pushEmptyResponse($status = 200, $headers = []);
+Gobble::pushEmptyResponse($status = 200, $headers = []);
 
-public function pushString($string, $status = 200, $headers = []);
+Gobble::pushString($string, $status = 200, $headers = []);
 
-public function pushJson(array $data, $status = 200, $headers = []);
+Gobble::pushJson(array $data, $status = 200, $headers = []);
 
-public function pushFile($filePath, $status = 200, $headers = []);
+Gobble::pushFile($filePath, $status = 200, $headers = []);
 ```
 
 Gobble offers two methods to assert the amount of responses in the mock handler queue:
