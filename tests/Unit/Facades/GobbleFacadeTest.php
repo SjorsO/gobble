@@ -16,6 +16,8 @@ class GobbleFacadeTest extends TestCase
         $facadeRoot = Gobble::getFacadeRoot();
 
         $this->assertInstanceOf(GuzzleWrapper::class, $facadeRoot);
+
+        $this->assertFalse(Gobble::isFaked());
     }
 
     /** @test */
@@ -28,22 +30,27 @@ class GobbleFacadeTest extends TestCase
         $facadeRoot = Gobble::getFacadeRoot();
 
         $this->assertInstanceOf(GuzzleFakeWrapper::class, $facadeRoot);
+
+        $this->assertTrue(Gobble::isFaked());
     }
 
     /** @test */
     function it_can_be_unfaked()
     {
         $this->assertInstanceOf(GuzzleWrapper::class, Gobble::getFacadeRoot());
+        $this->assertFalse(Gobble::isFaked());
 
         $fakeReturnedClass = Gobble::fake();
 
         $this->assertInstanceOf(GuzzleFakeWrapper::class, $fakeReturnedClass);
         $this->assertInstanceOf(GuzzleFakeWrapper::class, Gobble::getFacadeRoot());
+        $this->assertTrue(Gobble::isFaked());
 
         $unfakeReturnedClass = Gobble::unfake();
 
         $this->assertInstanceOf(GuzzleWrapper::class, $unfakeReturnedClass);
         $this->assertInstanceOf(GuzzleWrapper::class, Gobble::getFacadeRoot());
+        $this->assertFalse(Gobble::isFaked());
     }
 
     /** @test */

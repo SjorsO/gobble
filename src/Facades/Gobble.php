@@ -69,4 +69,9 @@ class Gobble extends Facade
 
         return static::getFacadeRoot();
     }
+
+    public static function isFaked()
+    {
+        return static::getFacadeRoot() instanceof GuzzleFakeWrapper;
+    }
 }
