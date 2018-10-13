@@ -106,10 +106,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(\GuzzleHttp\Client::class, function () {
-            return new \GuzzleHttp\Client([
-                'timeout' => 5,
-                'connect_timeout' => 5,
-            ]);
+            return new \GuzzleHttp\Client(['timeout' => 5, 'connect_timeout' => 5]);
         });
     }
 }
