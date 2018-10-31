@@ -82,6 +82,38 @@ class RequestHistory implements ArrayAccess
         return $this;
     }
 
+    public function assertRequestHeaderPresent($key)
+    {
+        PHPUnit::assertTrue(
+            $this->request->hasHeader($key),
+            "Header [$key] is not present on the request"
+        );
+
+        return $this;
+    }
+
+    public function assertRequestHeaderMissing($key)
+    {
+        PHPUnit::assertFalse(
+            $this->request->hasHeader($key),
+            "Unexpected header [$key] is present on the request"
+        );
+
+        return $this;
+    }
+
+    public function assertRequestHeader($key, $expected)
+    {
+        $this->assertRequestHeaderPresent($key);
+
+        PHPUnit::assertSame(
+            $expected,
+            $this->request->getHeaderLine($key)
+        );
+
+        return $this;
+    }
+
     public function offsetExists($offset)
     {
         return in_array($offset, ['request', 'response', 'error', 'options']);

@@ -84,4 +84,23 @@ class RequestHistoryTest extends TestCase
             'deviceIds' => ['aa1', 'aa2'],
         ]);
     }
+
+    /** @test */
+    function it_can_make_assertions_about_request_headers()
+    {
+        Gobble::fake()->pushEmptyResponse();
+
+        Gobble::post('https://laravel.com', [
+            'headers' => [
+                'key-1' => 'ja',
+            ]
+        ]);
+
+        Gobble::lastRequest()
+            ->assertRequestHeaderPresent('key-1')
+            ->assertRequestHeaderMissing('key-2')
+            ->assertRequestHeader('key-1', 'ja')
+            // assert that "assertRequestHeader" returns "$this"
+            ->assertRequestHeaderPresent('key-1');
+    }
 }

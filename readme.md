@@ -91,6 +91,12 @@ public function assertRequestBodyJson(array $data, $strict = false);
 public function assertRequestBodyExactJson(array $data);
 
 public function assertRequestUri($expected);
+
+public function assertRequestHeaderPresent($key);
+
+public function assertRequestHeaderMissing($key);
+
+public function assertRequestHeader($key, $expected);
 ```
 
 ### Guzzle configuration
