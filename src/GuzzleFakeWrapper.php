@@ -15,6 +15,9 @@ class GuzzleFakeWrapper
 {
     protected $guzzle;
 
+    /** @var HandlerStack  */
+    protected $handlerStack;
+
     /** @var MockHandler */
     protected $mockHandler;
 
@@ -22,15 +25,15 @@ class GuzzleFakeWrapper
 
     public function __construct()
     {
-        $handler = HandlerStack::create(
+        $this->handlerStack = HandlerStack::create(
             $this->mockHandler = new MockHandler()
         );
 
-        $handler->push(
+        $this->handlerStack->push(
             Middleware::history($this->requestHistory)
         );
 
-        $this->guzzle = new Guzzle(['handler' => $handler]);
+        $this->guzzle = new Guzzle(['handler' => $this->handlerStack]);
     }
 
     public function pushResponse($response)
@@ -68,6 +71,19 @@ class GuzzleFakeWrapper
         return $this->pushResponse(
             new Response($status, $headers, $string)
         );
+    }
+
+    public function autofillResponseStack()
+    {
+        $this->handlerStack->setHandler(function (...$args) {
+            if ($this->mockHandler->count() === 0) {
+                $this->pushEmptyResponse();
+            }
+
+            return call_user_func_array($this->mockHandler, $args);
+        });
+
+        return $this;
     }
 
     /**

@@ -42,6 +42,11 @@ Gobble::pushJson(array $data, $status = 200, $headers = []);
 Gobble::pushFile($filePath, $status = 200, $headers = []);
 ```
 
+You can also make Gobble automatically push an empty response to the response stack when a request is made. This is useful in some situations, and prevents your log from filling up with "Mock queue is empty" errors:
+```php
+Gobble::fake()->autofillResponseStack();
+```
+
 Gobble offers two methods to assert the amount of responses in the mock handler queue:
 ```php
 Gobble::assertMockQueueCount(3);

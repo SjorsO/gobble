@@ -49,11 +49,7 @@ class GuzzleFakeWrapperTest extends TestCase
         /** @var Response $response */
         $response = $gobbleFake->get('https://laravel.com');
 
-        $this->assertInstanceOf(Response::class, $response);
-
-        $this->assertSame(200, $response->getStatusCode());
-
-        $this->assertSame('', $response->getBody()->getContents());
+        $this->assertEmptyResponse($response);
     }
 
     /** @test */
@@ -179,5 +175,53 @@ class GuzzleFakeWrapperTest extends TestCase
         $gobbleFake = new GuzzleFakeWrapper();
 
         $gobbleFake->lastRequest();
+    }
+
+    /** @test */
+    function it_can_autofill_the_response_stack()
+    {
+        $gobbleFake = new GuzzleFakeWrapper();
+
+        $gobbleFake->autofillResponseStack();
+
+        $this->assertEmptyResponse(
+            $gobbleFake->get('https://laravel.com')
+        );
+
+        $this->assertEmptyResponse(
+            $gobbleFake->get('https://golang.org')
+        );
+
+        $gobbleFake->assertMockQueueEmpty();
+    }
+
+    /** @test */
+    function it_only_autofills_when_the_stack_is_empty()
+    {
+        $gobbleFake = New GuzzleFakeWrapper();
+
+        $gobbleFake->autofillResponseStack();
+
+        $gobbleFake->pushString('This is a pushed response');
+
+        $this->assertSame(
+            'This is a pushed response',
+            $gobbleFake->get('https://laravel.com')->getBody()->getContents()
+        );
+
+        $this->assertEmptyResponse(
+            $gobbleFake->get('https://golang.org')
+        );
+
+        $gobbleFake->assertMockQueueEmpty();
+    }
+
+    private function assertEmptyResponse($response)
+    {
+        $this->assertInstanceOf(Response::class, $response);
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $this->assertSame('', $response->getBody()->getContents());
     }
 }

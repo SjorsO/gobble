@@ -30,6 +30,7 @@ use SjorsO\Gobble\Support\RequestHistory;
  * @method static GuzzleFakeWrapper pushEmptyResponse($status = 200, $headers = [])
  * @method static GuzzleFakeWrapper pushString($string, $status = 200, $headers = [])
  * @method static GuzzleFakeWrapper pushFile($filePath, $status = 200, $headers = [])
+ * @method static GuzzleFakeWrapper autofillResponseStack()
  *
  * @method static GuzzleFakeWrapper assertMockQueueCount($expected)
  * @method static GuzzleFakeWrapper assertMockQueueEmpty()
