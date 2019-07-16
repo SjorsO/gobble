@@ -103,4 +103,23 @@ class RequestHistoryTest extends TestCase
             // assert that "assertRequestHeader" returns "$this"
             ->assertRequestHeaderPresent('key-1');
     }
+
+    /** @test */
+    function it_can_assert_if_a_request_body_contains_a_string()
+    {
+        Gobble::fake()->pushEmptyResponse();
+
+        Gobble::post('https://laravel.com', [
+            'json' => [
+                'tokens' => [
+                    $uuid1 = 'ae12635d-7a9b-478c-96df-089a44dabf93',
+                    $uuid2 = '66bbba0d-11b5-475e-a2a7-7c441c0fd3fd',
+                ],
+            ],
+        ]);
+
+        Gobble::lastRequest()->assertRequestBodyContains($uuid1);
+        Gobble::lastRequest()->assertRequestBodyContains($uuid2);
+        Gobble::lastRequest()->assertRequestBodyDoesntContain('a3acac67-4118-40ee-ac71-501aef773b7d');
+    }
 }

@@ -95,6 +95,10 @@ public function assertRequestBodyJson(array $data, $strict = false);
 
 public function assertRequestBodyExactJson(array $data);
 
+public function assertRequestBodyContains($string);
+
+public function assertRequestBodyDoesntContain($string);
+
 public function assertRequestUri($expected);
 
 public function assertRequestHeaderPresent($key);
@@ -109,16 +113,16 @@ For every call made the `GuzzleWrapper` resolves a `GuzzleHttp\Client` from the 
 ```php
 class AppServiceProvider extends ServiceProvider
 {
-    public function boot()
-    {
-        //
-    }
-
     public function register()
     {
         $this->app->bind(\GuzzleHttp\Client::class, function () {
             return new \GuzzleHttp\Client(['timeout' => 5, 'connect_timeout' => 5]);
         });
+    }
+
+    public function boot()
+    {
+        //
     }
 }
 ```

@@ -34,6 +34,8 @@ class RequestHistory implements ArrayAccess
 
     public function requestBody()
     {
+        $this->request->getBody()->rewind();
+
         return $this->request->getBody()->getContents();
     }
 
@@ -71,6 +73,20 @@ class RequestHistory implements ArrayAccess
         ));
 
         PHPUnit::assertSame($expected, $actual);
+
+        return $this;
+    }
+
+    public function assertRequestBodyContains($string)
+    {
+        PHPUnit::assertStringContainsString($string, $this->requestBody());
+
+        return $this;
+    }
+
+    public function assertRequestBodyDoesntContain($string)
+    {
+        PHPUnit::assertStringNotContainsString($string, $this->requestBody());
 
         return $this;
     }
