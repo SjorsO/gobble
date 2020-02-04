@@ -17,15 +17,32 @@ $response = Gobble::get('https://laravel.com');
 ### Mocking responses
 When writing tests, you can fake Gobble to make it use [Guzzle's built-in mock handler](http://docs.guzzlephp.org/en/stable/testing.html). When `Gobble` is faked you can use it to push responses to the mock handler stack:
 ```php
+use SjorsO\Gobble\Facades\Gobble as Guzzle;
+
+class CatFactController
+{
+    public function create()
+    {
+        $response = Guzzle::get('https://catfact.ninja/fact');
+
+        $json = json_decode($response->getBody()->getContents(), true);
+
+        CatFact::create([
+            'fact' => $json['fact'],
+        ]);
+    }
+}
+```
+
+```php
 /** @test */
-function it_can_get_a_cat_fact()
+function it_can_create_a_cat_fact()
 {
     Gobble::fake()->pushJson(['fact' => 'Cats are great!']);
 
-    // This job makes a call using Gobble to "https://catfact.ninja/fact"
-    CreateCatFactJob::dispatchNow();
+    $this->post('/cat-fact/create')->assertStatus(200);
 
-    $this->assertSame('Cats are great!', CatFact::findOrFail(1)->fact);
+    $this->assertSame('Cats are great!', CatFact::firstOrFail()->fact);
 }
 ```
 
