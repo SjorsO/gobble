@@ -1,3 +1,15 @@
+# Deprecated
+As of version 7, Laravel now includes an [`HTTP` class](https://laravel.com/docs/7.x/http-client#introduction) that makes it easy to guzzle mock responses.
+
+Migrating from Gobble to the new `HTTP` facade isn't too difficult, for example:
+```php
+// old
+Gobble::fake()->pushEmptyResponse()
+
+// new
+HTTP::fakeSequence()->pushStatus(200);
+```
+
 # Gobble
 A Laravel specific wrapper around Guzzle that makes it easy to mock responses.
 
