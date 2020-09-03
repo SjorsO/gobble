@@ -3,6 +3,7 @@
 namespace SjorsO\Gobble\Support;
 
 use ArrayAccess;
+use DMS\PHPUnitExtensions\ArraySubset\Assert;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Support\Arr;
@@ -59,7 +60,7 @@ class RequestHistory implements ArrayAccess
 
     public function assertRequestBodyJson(array $data, $strict = false)
     {
-        PHPUnit::assertArraySubset($data, $this->decodeRequestJson(), $strict);
+        Assert::assertArraySubset($data, $this->decodeRequestJson(), $strict);
 
         return $this;
     }

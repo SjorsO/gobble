@@ -13,7 +13,7 @@ abstract class TestCase extends BaseTestCase
 
     public $app;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -30,7 +30,7 @@ abstract class TestCase extends BaseTestCase
         $this->testFilePath = __DIR__.'/Files/';
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->app->flush();
 

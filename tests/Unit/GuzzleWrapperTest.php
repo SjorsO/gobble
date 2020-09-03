@@ -16,6 +16,6 @@ class GuzzleWrapperTest extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
 
-        $this->assertContains('artisan', $response->getBody()->getContents());
+        $this->assertStringContainsString('artisan', $response->getBody()->getContents());
     }
 }
